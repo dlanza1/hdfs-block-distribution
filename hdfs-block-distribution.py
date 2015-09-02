@@ -10,7 +10,6 @@ def filter_block_lines(lines):
   regex = re.compile('\d+[.]\s')
 
   for line in lines:
-    print line
     if regex.match(line):
       block_lines.append(line)
 
@@ -23,7 +22,7 @@ def get_host_and_storage_id_tuples(block_lines):
   for line in block_lines:
     for replica in p.finditer(line):
       start_idx = replica.end() + 1
-      end_idx = block_lines[0].find(']', start_idx)
+      end_idx = block_lines[0].find('\]', start_idx)
       fields = line[start_idx:end_idx].split(",")
       tuples.append([fields[0], fields[1]])
 
@@ -61,9 +60,9 @@ def show_matrix(matrix):
 
     print line
 
-command = 'hadoop fsck / -files -blocks -locations'.split()
+command = 'hadoop fsck /user/ -files -blocks -locations'.split()
 block_lines = filter_block_lines(run_command(command))
 tuples = get_host_and_storage_id_tuples(block_lines)
 matrix = fill_matrix(tuples)
-#show_matrix(matrix)
+show_matrix(matrix)
 show_total_per_host(matrix)
