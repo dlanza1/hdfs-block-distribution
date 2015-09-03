@@ -1,5 +1,6 @@
 import subprocess
 import re
+from host import Host
 
 def run_command(command):
     "Run command line"
@@ -37,29 +38,21 @@ def fill_matrix(pairs):
 
     for pair in pairs:
         host = pair[0]
-        storage = pair[1]
-        if not hosts.has_key(host):
-            hosts[host] = {}  
+        storage = pair[1]  
     
-        if hosts[host].has_key(storage):
-            hosts[host][storage] += 1
-        else:
-            hosts[host][storage] = 1
+        if not hosts.has_key(host):
+            hosts[host] = Host(host)
+        hosts[host].addBlock(storage)
 
     return hosts
 
-def show_total_blocks_per_host(matrix):
-    for host_name, values in matrix.iteritems():
-        total = 0
-        for value in values.itervalues():
-            total += value
-        print "Host %s > %d blocks" % (host_name, total)
+def show_total_blocks_per_host(hosts):
+    for host in hosts.itervalues():
+        print "Host %s: %d blocks" % (host.hostname, host.totalBlocks())
 
 def show_matrix(matrix):
-    for host_name, values in matrix.iteritems():
-        line = ""
-        print host_name
-        for value in values.itervalues():
-            line = line + str(value) + " "
-
-    print line
+    for host in matrix.itervalues():
+        print host.hostname
+        print host.blocksPerDiskAsString()
+        
+        
