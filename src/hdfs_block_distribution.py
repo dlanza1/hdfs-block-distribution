@@ -1,8 +1,17 @@
 from utils import *
+import sys
+
+def processArgs():
+    if len(sys.argv) != 2:
+        print 'An argument must be specified indicating the HDFS directory to analyze'
+        sys.exit()
+
+    return sys.argv[1]
 
 def main():
-    # Run command
-    command = 'hdfs fsck /user/ -files -blocks -locations'
+    directory = processArgs()
+    
+    command = 'hdfs fsck ' + directory + ' -files -blocks -locations'
     output = run_command(command)
 
     # Compute output
