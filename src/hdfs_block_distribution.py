@@ -2,7 +2,7 @@ from utils import *
 
 def main():
     # Run command
-    command = 'hadoop fsck /user/ -files -blocks -locations'
+    command = 'hdfs fsck /user/ -files -blocks -locations'
     output = run_command(command)
 
     # Compute output
