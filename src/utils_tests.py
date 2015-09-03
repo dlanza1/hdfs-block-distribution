@@ -5,17 +5,19 @@ class HdfsBlockDistributionTests(unittest.TestCase):
     
     def test_filter_block_lines(self):
         lines = []
-        lines.append('1. ABC');
-        lines.append('. ABC');
-        lines.append('1 ABC');
-        lines.append('1.ABC');
-        lines.append(' ABC');
-        lines.append('ABC');
+        lines.append('1. ABCDEF');
+        lines.append('. ABCDEF');
+        lines.append('1 ABCDEF');
+        lines.append('1.ABCDEF');
+        lines.append(' ABCDEF');
+        lines.append('ABCDEF');
         
-        filtered_lines = filter_block_lines(lines)
+        filtered_lines, other_lines = filter_block_lines(lines)
         
         self.assertEqual(filtered_lines[0], lines[0])
         self.assertEqual(len(filtered_lines), 1)
+        
+        self.assertEqual(len(other_lines), 5)
 
     def test_get_host_and_storage_id_tuples(self):
         lines = []
@@ -36,16 +38,16 @@ class HdfsBlockDistributionTests(unittest.TestCase):
         
     def test_fill_matrix(self):
         tuples = []
-        tuples.append(['h1', 's1'])
-        tuples.append(['h1', 's1'])
-        tuples.append(['h2', 's1'])
-        tuples.append(['h2', 's2'])
+        tuples.append(['h1:10', 's1'])
+        tuples.append(['h1:10', 's1'])
+        tuples.append(['h2:10', 's1'])
+        tuples.append(['h2:10', 's2'])
         
         matrix = fill_matrix(tuples)
         
-        self.assertEqual(matrix['h1']['s1'], 2)
-        self.assertEqual(matrix['h2']['s1'], 1)
-        self.assertEqual(matrix['h2']['s2'], 1)
+        self.assertEqual(matrix['h1:10'].blocks_per_disk['s1'], 2)
+        self.assertEqual(matrix['h2:10'].blocks_per_disk['s1'], 1)
+        self.assertEqual(matrix['h2:10'].blocks_per_disk['s2'], 1)
         
 if __name__ == "__main__":
     unittest.main()

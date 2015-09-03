@@ -1,4 +1,5 @@
 from utils import *
+from colors import *
 import sys
 
 def processArgs():
@@ -14,8 +15,11 @@ def main():
     command = 'hdfs fsck ' + directory + ' -files -blocks -locations'
     output = run_command(command)
 
-    # Compute output
-    block_lines = filter_block_lines(output)
+    block_lines, other_lines = filter_block_lines(output)
+    
+    for line in other_lines:
+        print color(line, colors.Y)
+    
     tuples = get_host_and_storage_id_tuples(block_lines)
     matrix = fill_matrix(tuples)
 

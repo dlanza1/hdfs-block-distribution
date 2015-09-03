@@ -10,13 +10,17 @@ def run_command(command):
 def filter_block_lines(lines):
     "Return only lines which represent blocks"
     block_lines = []
-    regex = re.compile('\d+[.]\s')
+    other_lines = []
+    block_line_regx = re.compile('\d+[.]\s')
+    directory_regx = re.compile('/')
 
     for line in lines:
-        if regex.match(line):
+        if block_line_regx.match(line):
             block_lines.append(line)
-
-    return block_lines
+        elif directory_regx.match(line) is None and len(line) > 4:
+            other_lines.append(line)
+            
+    return block_lines, other_lines
 
 def get_host_and_storage_id_tuples(block_lines):
     "Get list of tuples with host and storage id"
@@ -53,7 +57,6 @@ def show_total_blocks_per_host(hosts):
 def show_matrix(matrix):
     for host in matrix.itervalues():
         print host.hostname
-        print host.blocksPerDiskAsString()
         print host.blocksPerDiskAsColouredString()
         
         
