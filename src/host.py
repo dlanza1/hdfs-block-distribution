@@ -1,4 +1,5 @@
 import socket
+from colors import *
 
 class Host:
     
@@ -26,6 +27,24 @@ class Host:
         string = ''
         for num in self.blocks_per_disk.itervalues():
             string += str(num) + ' '
+        return string
+    
+    def blocksPerDiskAsColouredString(self):
+        avg = self.avgBlocks()
+        yellow_max = avg * 1.5
+        green_max = avg * 1.2
+        green_min = avg * 0.8
+        yellow_min = avg * 0.5
+        
+        string = ''
+        for num in self.blocks_per_disk.itervalues():
+            if num < green_max and num > green_min:
+                string += color(num, colors.G) + ' '
+            elif num < yellow_max and num > yellow_min:
+                string += color(num, colors.Y) + ' '
+            else:
+                string += color(num, colors.R) + ' '
+            
         return string
     
     def totalBlocks(self):

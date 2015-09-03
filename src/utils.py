@@ -54,5 +54,6 @@ def show_matrix(matrix):
     for host in matrix.itervalues():
         print host.hostname
         print host.blocksPerDiskAsString()
+        print host.blocksPerDiskAsColouredString()
         
         
