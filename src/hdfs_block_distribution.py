@@ -4,10 +4,7 @@ from optparse import OptionParser
 import sys
 
 class BadArguments(Exception):
-    def __init__message(self, message):
-        self.value = message
-    def __str__(self):
-        return self.message
+    """Arguments were not specified properly"""
     
 def representsInt(s):
     try: 
