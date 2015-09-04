@@ -56,3 +56,32 @@ class Host:
     
     def avgBlocks(self):
         return float(self.totalBlocks()) / len(self.blocks_per_disk)
+    
+    def showDetailedInfo(self, perc_warn, perc_err):
+        print "Detailed information of %s" % (self.hostname)
+        
+        avg = self.avgBlocks()
+        
+        yellow_max = avg * (1 + perc_err)
+        green_max = avg * (1 + perc_warn)
+        green_min = avg * (1 - perc_warn)
+        yellow_min = avg * (1 - perc_err)
+        
+        for sid, num in self.blocks_per_disk.iteritems():
+            if num < green_max and num > green_min:
+                nums = color(num, colors.G)
+            elif num < yellow_max and num > yellow_min:
+                nums = color(num, colors.Y)
+            else:
+                nums = color(num, colors.R)
+                
+            print 'Storage: %s' % (sid)
+            print '\tStorageID: %s' % (sid)
+            print '\tNumber of blocks: %s' % (nums)
+        
+        
+        
+        
+        
+        
+        

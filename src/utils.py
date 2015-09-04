@@ -50,4 +50,9 @@ def fill_matrix(pairs):
 
     return hosts
 
-    
+def representsInt(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
