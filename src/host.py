@@ -29,12 +29,13 @@ class Host:
             string += str(num) + ' '
         return string
     
-    def blocksPerDiskAsColouredString(self):
+    def blocksPerDiskAsColouredString(self, perc_warn, perc_err):
         avg = self.avgBlocks()
-        yellow_max = avg * 1.5
-        green_max = avg * 1.2
-        green_min = avg * 0.8
-        yellow_min = avg * 0.5
+        
+        yellow_max = avg * (1 + perc_err)
+        green_max = avg * (1 + perc_warn)
+        green_min = avg * (1 - perc_warn)
+        yellow_min = avg * (1 + perc_err)
         
         string = ''
         for num in self.blocks_per_disk.itervalues():

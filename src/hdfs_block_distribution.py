@@ -61,11 +61,17 @@ def main():
         print color(line, colors.Y)
     
     tuples = get_host_and_storage_id_tuples(block_lines)
-    matrix = fill_matrix(tuples)
+    hosts = fill_matrix(tuples)
 
     # Show results
-    show_matrix(matrix)
-    show_total_blocks_per_host(matrix)
+    perc_warn = float(options.perc_warn) / 100
+    perc_err = float(options.perc_err) / 100
+    for host in hosts.itervalues():
+        print host.hostname
+        print host.blocksPerDiskAsColouredString(perc_warn, perc_err)
+    
+    for host in hosts.itervalues():
+        print "Host %s: %d blocks" % (host.hostname, host.totalBlocks())
 
 if __name__ == '__main__':
     main()

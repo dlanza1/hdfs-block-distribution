@@ -50,13 +50,4 @@ def fill_matrix(pairs):
 
     return hosts
 
-def show_total_blocks_per_host(hosts):
-    for host in hosts.itervalues():
-        print "Host %s: %d blocks" % (host.hostname, host.totalBlocks())
-
-def show_matrix(matrix):
-    for host in matrix.itervalues():
-        print host.hostname
-        print host.blocksPerDiskAsColouredString()
-        
-        
+    
