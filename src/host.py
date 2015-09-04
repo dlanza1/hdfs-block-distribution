@@ -1,5 +1,8 @@
 import socket
+import os
+import subprocess
 from colors import *
+from sys import stderr
 
 class Storage:
     
@@ -67,8 +70,36 @@ class Host:
     def avgBlocks(self):
         return float(self.totalBlocks()) / len(self.storages)
     
+    def get_map_storageid_folder(self):
+        ssh_command = 'ssh root@' + self.hostname
+        directory = os.path.dirname(os.path.realpath(__file__))
+        script_command = 'cat ' + directory + '/map_storageid_folder.sh'
+        
+        print 'SSHing for getting folders (root access is required): %s' %(ssh_command)
+        print
+        
+        devnull = open(os.devnull, 'wb')
+        p_in = subprocess.Popen(script_command.split(), stdout=subprocess.PIPE)
+        p_ssh = subprocess.Popen(ssh_command.split(), 
+                                 stdin=p_in.stdout, 
+                                 stdout=subprocess.PIPE,
+                                 stderr=devnull)
+        
+        return iter(p_ssh.stdout.readline, b'')
+
+    def fill_storage_folders(self):
+        output = self.get_map_storageid_folder()
+        
+        for line in output:
+            try:
+                fields = line.split(',')
+                self.storages[fields[0]].folder = fields[1].rstrip()
+            except Exception:
+                pass
+    
     def showDetailedInfo(self, perc_warn, perc_err):
-        print "Detailed information of %s" % (self.hostname)
+        print color("Detailed information for %s" % (self.hostname), colors.U)
+        print
         
         avg = self.avgBlocks()
         
@@ -76,6 +107,8 @@ class Host:
         green_max = avg * (1 + perc_warn)
         green_min = avg * (1 - perc_warn)
         yellow_min = avg * (1 - perc_err)
+        
+        self.fill_storage_folders()
         
         for sid, storage in self.storages.iteritems():
             if storage.blocks < green_max and storage.blocks > green_min:
@@ -87,7 +120,7 @@ class Host:
                 
             print 'StorageID: %s' % (storage.id)
             print '\tFolder: %s' % (storage.folder)
-            print '\tNumber of blocks: %s' % (storage.blocks)
+            print '\tNumber of blocks: %s' % (nums)
             print
         
         
