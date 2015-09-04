@@ -6,6 +6,7 @@ class Storage:
     def __init__(self, id):
         self.id = id
         self.blocks = 0
+        self.folder = 'unknown'
         
     def addBlock(self):
         self.blocks += 1
@@ -84,9 +85,9 @@ class Host:
             else:
                 nums = color(storage.blocks, colors.R)
                 
-            print 'Storage: %s' % (sid)
-            print '\tStorageID: %s' % (sid)
-            print '\tNumber of blocks: %s' % (nums)
+            print 'StorageID: %s' % (storage.id)
+            print '\tFolder: %s' % (storage.folder)
+            print '\tNumber of blocks: %s' % (storage.blocks)
             print
         
         
