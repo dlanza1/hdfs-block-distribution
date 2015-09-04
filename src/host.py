@@ -1,13 +1,22 @@
 import socket
 from colors import *
 
+class Storage:
+    
+    def __init__(self, id):
+        self.id = id
+        self.blocks = 0
+        
+    def addBlock(self):
+        self.blocks += 1
+
 class Host:
     
     def __init__(self, host_port):
         fileds = host_port.split(':')
         self.ip = fileds[0]
         self.port = int(fileds[1])
-        self.blocks_per_disk = {}
+        self.storages = {}
         
         try:
             self.hostname = self.resolveHostname(self.ip)
@@ -18,15 +27,15 @@ class Host:
         return socket.gethostbyaddr(ip)[0]
     
     def addBlock(self, storageID):
-        if not self.blocks_per_disk.has_key(storageID):
-            self.blocks_per_disk[storageID] = 1
-        else:
-            self.blocks_per_disk[storageID] += 1
+        if not self.storages.has_key(storageID):
+            self.storages[storageID] = Storage(storageID)
+        
+        self.storages[storageID].addBlock()
             
     def blocksPerDiskAsString(self):
         string = ''
-        for num in self.blocks_per_disk.itervalues():
-            string += str(num) + ' '
+        for storage in self.storages.itervalues():
+            string += str(storage.blocks) + ' '
         return string
     
     def blocksPerDiskAsColouredString(self, perc_warn, perc_err):
@@ -38,24 +47,24 @@ class Host:
         yellow_min = avg * (1 - perc_err)
         
         string = ''
-        for num in self.blocks_per_disk.itervalues():
-            if num < green_max and num > green_min:
-                string += color(num, colors.G) + ' '
-            elif num < yellow_max and num > yellow_min:
-                string += color(num, colors.Y) + ' '
+        for storage in self.storages.itervalues():
+            if storage.blocks < green_max and storage.blocks > green_min:
+                string += color(storage.blocks, colors.G) + ' '
+            elif storage.blocks < yellow_max and storage.blocks > yellow_min:
+                string += color(storage.blocks, colors.Y) + ' '
             else:
-                string += color(num, colors.R) + ' '
+                string += color(storage.blocks, colors.R) + ' '
             
         return string
     
     def totalBlocks(self):
         total = 0
-        for num in self.blocks_per_disk.itervalues():
-            total += num
+        for storage in self.storages.itervalues():
+            total += storage.blocks
         return total
     
     def avgBlocks(self):
-        return float(self.totalBlocks()) / len(self.blocks_per_disk)
+        return float(self.totalBlocks()) / len(self.storages)
     
     def showDetailedInfo(self, perc_warn, perc_err):
         print "Detailed information of %s" % (self.hostname)
@@ -67,17 +76,18 @@ class Host:
         green_min = avg * (1 - perc_warn)
         yellow_min = avg * (1 - perc_err)
         
-        for sid, num in self.blocks_per_disk.iteritems():
-            if num < green_max and num > green_min:
-                nums = color(num, colors.G)
-            elif num < yellow_max and num > yellow_min:
-                nums = color(num, colors.Y)
+        for sid, storage in self.storages.iteritems():
+            if storage.blocks < green_max and storage.blocks > green_min:
+                nums = color(storage.blocks, colors.G)
+            elif storage.blocks < yellow_max and storage.blocks > yellow_min:
+                nums = color(storage.blocks, colors.Y)
             else:
-                nums = color(num, colors.R)
+                nums = color(storage.blocks, colors.R)
                 
             print 'Storage: %s' % (sid)
             print '\tStorageID: %s' % (sid)
             print '\tNumber of blocks: %s' % (nums)
+            print
         
         
         

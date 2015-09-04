@@ -18,9 +18,9 @@ class HostTest(unittest.TestCase):
         self.assertEqual(host.hostname, '288.184.9.234')
 
     def test_addBlock(self):
-        self.assertEqual(self.host.blocks_per_disk['s1'], 2)
-        self.assertEqual(self.host.blocks_per_disk['s2'], 2)
-        self.assertEqual(self.host.blocks_per_disk['s3'], 1)
+        self.assertEqual(self.host.storages['s1'].blocks, 2)
+        self.assertEqual(self.host.storages['s2'].blocks, 2)
+        self.assertEqual(self.host.storages['s3'].blocks, 1)
         
     def test_blocksPerDiskAsString(self):
         self.assertEqual(self.host.blocksPerDiskAsString(), '1 2 2 ')

@@ -45,9 +45,9 @@ class UtilsTests(unittest.TestCase):
         
         matrix = fill_matrix(tuples)
         
-        self.assertEqual(matrix['h1:10'].blocks_per_disk['s1'], 2)
-        self.assertEqual(matrix['h2:10'].blocks_per_disk['s1'], 1)
-        self.assertEqual(matrix['h2:10'].blocks_per_disk['s2'], 1)
+        self.assertEqual(matrix['h1:10'].storages['s1'].blocks, 2)
+        self.assertEqual(matrix['h2:10'].storages['s1'].blocks, 1)
+        self.assertEqual(matrix['h2:10'].storages['s2'].blocks, 1)
         
 if __name__ == "__main__":
     unittest.main()
