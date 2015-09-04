@@ -1,7 +1,7 @@
 import unittest
 from utils import *
 
-class HdfsBlockDistributionTests(unittest.TestCase):
+class UtilsTests(unittest.TestCase):
     
     def test_filter_block_lines(self):
         lines = []
