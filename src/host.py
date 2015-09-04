@@ -35,7 +35,7 @@ class Host:
         yellow_max = avg * (1 + perc_err)
         green_max = avg * (1 + perc_warn)
         green_min = avg * (1 - perc_warn)
-        yellow_min = avg * (1 + perc_err)
+        yellow_min = avg * (1 - perc_err)
         
         string = ''
         for num in self.blocks_per_disk.itervalues():

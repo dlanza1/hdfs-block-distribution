@@ -37,8 +37,8 @@ def processArgs(arguments):
     if not representsInt(options.perc_err):
         raise BadArguments("-e argument must be an integer number.")
         
-    if len(args) > 0:
-        print color("WARNING: You have specified arguments which have not been processed:" + repr(args), colors.Y)
+    if len(args) > 1:
+        print color("WARNING: You have specified arguments which have not been processed: " + repr(args[1:]), colors.Y)
     
     return options
 
@@ -64,8 +64,9 @@ def main():
     perc_warn = float(options.perc_warn) / 100
     perc_err = float(options.perc_err) / 100
     for host in hosts.itervalues():
-        print host.hostname
+        print 'Host: %s' % (host.hostname)
         print host.blocksPerDiskAsColouredString(perc_warn, perc_err)
+        print
     
     for host in hosts.itervalues():
         print "Host %s: %d blocks" % (host.hostname, host.totalBlocks())
