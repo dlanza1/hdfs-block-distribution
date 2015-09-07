@@ -71,17 +71,15 @@ class Host:
         return float(self.totalBlocks()) / len(self.storages)
     
     def get_map_storageid_folder(self):
+        remote_script = open('map_storageid_folder.sh')
         ssh_command = 'ssh root@' + self.hostname
-        directory = os.path.dirname(os.path.realpath(__file__))
-        script_command = 'cat ' + directory + '/map_storageid_folder.sh'
         
         print 'SSHing for getting folders (root access is required): %s' %(ssh_command)
         print
         
         devnull = open(os.devnull, 'wb')
-        p_in = subprocess.Popen(script_command.split(), stdout=subprocess.PIPE)
         p_ssh = subprocess.Popen(ssh_command.split(), 
-                                 stdin=p_in.stdout, 
+                                 stdin=remote_script, 
                                  stdout=subprocess.PIPE,
                                  stderr=devnull)
         
