@@ -48,13 +48,34 @@ def show_blocks_per_host_disk(hosts, perc_warn, perc_err):
         print host.blocksPerDiskAsColouredString(perc_warn, perc_err)
         print
         
-def show_blocks_per_host(hosts):
+def show_blocks_per_host(hosts, perc_warn, perc_err):
     print
     print color('Total blocks per host', colors.U)
     print
     
+    # Calculate average
+    avg = 0.0
     for host in hosts.itervalues():
-        print "Host %s: %d blocks" % (host.hostname, host.totalBlocks())
+        avg += host.totalBlocks()
+    avg = avg / len(hosts)
+    
+    # Calculate thresholds
+    yellow_max = avg * (1 + perc_err)
+    green_max = avg * (1 + perc_warn)
+    green_min = avg * (1 - perc_warn)
+    yellow_min = avg * (1 - perc_err)
+    
+    # Print depending on thresholds
+    for host in hosts.itervalues():
+        num = host.totalBlocks()
+        if num < green_max and num > green_min:
+            blocks = color(num, colors.G)
+        elif num < yellow_max and num > yellow_min:
+            blocks = color(num, colors.Y)
+        else:
+            blocks = color(num, colors.R)
+            
+        print "Host %s: %s blocks" % (host.hostname, blocks)
 
 def main():
     try:
@@ -82,7 +103,7 @@ def main():
     if not options.node:
         show_blocks_per_host_disk(hosts, perc_warn, perc_err)
         
-        show_blocks_per_host(hosts)
+        show_blocks_per_host(hosts, perc_warn, perc_err)
     else:
         for host in hosts.itervalues():
             if host.hostname == options.node:
