@@ -8,8 +8,8 @@ class BadArguments(Exception):
 
 def processArgs(arguments):    
     parser = OptionParser()
-    parser.add_option("-d", "--dir", 
-                      help="directory to be analyzed (mandatory)", 
+    parser.add_option("-p", "--path", 
+                      help="path of directory or file to be analyzed (mandatory)", 
                       metavar="PATH")
     parser.add_option("-w", "--perc_warn", 
                       help="percentage to use for coloring number of blocks in yellow (def=20)", 
@@ -25,7 +25,7 @@ def processArgs(arguments):
 
     (options, args) = parser.parse_args(args=arguments)
     
-    if not options.dir:
+    if not options.path:
         raise BadArguments("Directory must be specified with -d argument.")
     
     if not representsInt(options.perc_warn):
@@ -84,7 +84,7 @@ def main():
         print e
         sys.exit()
     
-    command = 'hdfs fsck ' + options.dir + ' -files -blocks -locations'
+    command = 'hdfs fsck ' + options.path + ' -files -blocks -locations'
     output = run_command(command)
 
     block_lines, other_lines = filter_block_lines(output)
