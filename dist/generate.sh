@@ -1,8 +1,9 @@
 NAME=hdfs-block-dist
-DIST_PATH=`dirname $0`
+DIST_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# COmpress binaries
-zip -r $DIST_PATH/$NAME.zip ../src/*
+# Compress binaries
+cd $DIST_PATH/../src/
+zip -r $DIST_PATH/$NAME.zip *
 
 # Generate executable
 echo '#!/usr/bin/env python' | cat - $DIST_PATH/$NAME.zip > $DIST_PATH/$NAME
