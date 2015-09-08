@@ -1,5 +1,5 @@
 import unittest
-from hdfs_block_distribution import processArgs, BadArguments
+from __main__ import processArgs, BadArguments
 
 class HdfsBlockDistributionTests(unittest.TestCase):
     

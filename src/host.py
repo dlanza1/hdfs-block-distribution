@@ -1,8 +1,8 @@
 import socket
 import os
 import subprocess
+from pkgutil import get_data
 from colors import *
-from sys import stderr
 
 class Storage:
     
@@ -71,7 +71,7 @@ class Host:
         return float(self.totalBlocks()) / len(self.storages)
     
     def get_map_storageid_folder(self):
-        remote_script = open('map_storageid_folder.sh')
+        remote_script = get_data('scripts', 'map_storageid_folder.sh')
         ssh_command = 'ssh root@' + self.hostname
         
         print 'SSHing for getting folders (root access is required): %s' %(ssh_command)
@@ -79,9 +79,11 @@ class Host:
         
         devnull = open(os.devnull, 'wb')
         p_ssh = subprocess.Popen(ssh_command.split(), 
-                                 stdin=remote_script, 
+                                 stdin=subprocess.PIPE, 
                                  stdout=subprocess.PIPE,
                                  stderr=devnull)
+        p_ssh.stdin.write(remote_script)
+        p_ssh.stdin.close()
         
         return iter(p_ssh.stdout.readline, b'')
 
@@ -108,7 +110,7 @@ class Host:
         
         self.fill_storage_folders()
         
-        for sid, storage in self.storages.iteritems():
+        for storage in self.storages.itervalues():
             if storage.blocks < green_max and storage.blocks > green_min:
                 nums = color(storage.blocks, colors.G)
             elif storage.blocks < yellow_max and storage.blocks > yellow_min:
@@ -121,8 +123,7 @@ class Host:
             print '\tNumber of blocks: %s' % (nums)
             print
         
-        
-        
+
         
         
         
