@@ -1,10 +1,20 @@
 import subprocess
 import re
+import sys
 from host import Host
 
 def run_command(command):
     "Run command line"
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    
+    try:
+        p = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    except OSError as e:
+        if e.errno == 2:
+            print "This command must be run on a machine where Hadoop is installed"
+            sys.exit()
+        else:
+            raise e
+        
     return iter(p.stdout.readline, b'')
 
 def filter_block_lines(lines):
