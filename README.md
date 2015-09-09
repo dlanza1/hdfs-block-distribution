@@ -6,9 +6,9 @@ Numbers showing the number of blocks are colored. Colors enable users to easily 
 
 ### How it works
 
-Based of the information provided by the HDFS filesystem checking utility, which lists the blocks of a particulas folder or file, this tool counts the blocks per disk and per machine.
+Based on the information provided by the HDFS filesystem checking utility, which lists the blocks of a particulas folder or file, this tool counts the blocks per disk and per machine.
 
-An average is calculated per machine. Number colors are determined by comparing number of blocks of each disk with the average in terms of percentage.
+An average is calculated per machine. Colors of numbers are determined by comparing number of blocks of each disk with the average in terms of percentage.
 
 ### Running it
 
@@ -26,5 +26,5 @@ Arguments:
  * -p <path>: (mandatory) path to the directory or file to analyze.
  * -w <0-100>: set percentage to use when coloring in yellow (default: 20).
  * -e <0-100>: set percentage to use when coloring in red (default: 50).
- * -n <hostname>: get detailed information for a given host.
+ * -n <hostname>: get detailed information for a given host (root access through SSH is needed).
  * -h: show help and exit.
