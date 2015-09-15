@@ -26,7 +26,7 @@ def processArgs(arguments):
     (options, args) = parser.parse_args(args=arguments)
     
     if not options.path:
-        raise BadArguments("Directory must be specified with -d argument.")
+        raise BadArguments("Directory or file must be specified with -p argument.")
     
     if not representsInt(options.perc_warn):
         raise BadArguments("-w argument must be an integer number.")
