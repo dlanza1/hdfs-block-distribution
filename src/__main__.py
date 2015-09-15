@@ -43,6 +43,10 @@ def show_blocks_per_host_disk(hosts, perc_warn, perc_err):
     print color('Blocks per disk on each host', colors.U)
     print
     
+    if len(hosts) == 0:
+        print 'No blocks for this directory/file'
+        return
+    
     for host in hosts.itervalues():
         print 'Host: %s' % (host.hostname)
         print host.blocksPerDiskAsColouredString(perc_warn, perc_err)
@@ -52,6 +56,10 @@ def show_blocks_per_host(hosts, perc_warn, perc_err):
     print
     print color('Total blocks per host', colors.U)
     print
+    
+    if len(hosts) == 0:
+        print 'No blocks for this directory/file'
+        return
     
     # Calculate average
     avg = 0.0
@@ -96,6 +104,10 @@ def main():
     # Compute blocks per host and disk
     tuples = get_host_and_storage_id_tuples(block_lines)
     hosts = fill_matrix(tuples)
+    
+    if len(hosts) == 0:
+        print 'No blocks for this directory/file'
+        return
 
     # Show results
     perc_warn = float(options.perc_warn) / 100

@@ -68,6 +68,9 @@ class Host:
         return total
     
     def avgBlocks(self):
+        if len(self.storages) == 0:
+            return 0
+        
         return float(self.totalBlocks()) / len(self.storages)
     
     def get_map_storageid_folder(self):
@@ -102,6 +105,10 @@ class Host:
         print
         
         avg = self.avgBlocks()
+        
+        if avg == 0:
+            print 'No blocks for this directory/file on this host'
+            return
         
         yellow_max = avg * (1 + perc_err)
         green_max = avg * (1 + perc_warn)
